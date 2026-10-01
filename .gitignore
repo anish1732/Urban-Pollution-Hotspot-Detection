@@ -1,0 +1,7 @@
+.env
+.env.*
+!.env.example
+*.token
+*.secret
+secrets/
+influxdb-data/

@@ -1,0 +1,19 @@
+apiVersion: 1
+
+datasources:
+  - name: InfluxDB-Pollution
+    uid: influxdb-pollution
+    type: influxdb
+    access: proxy
+    url: http://influxdb:8181
+    isDefault: true
+    editable: false
+
+    jsonData:
+      version: SQL
+      dbName: iot_data
+      httpMode: POST
+      insecureGrpc: true
+
+    secureJsonData:
+      token: ${INFLUXDB_TOKEN}

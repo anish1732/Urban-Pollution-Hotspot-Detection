@@ -1,0 +1,2133 @@
+﻿{
+    "annotations":  {
+                        "list":  [
+                                     {
+                                         "builtIn":  1,
+                                         "datasource":  {
+                                                            "type":  "grafana",
+                                                            "uid":  "-- Grafana --"
+                                                        },
+                                         "enable":  true,
+                                         "hide":  true,
+                                         "iconColor":  "rgba(0, 211, 255, 1)",
+                                         "name":  "Annotations \u0026 Alerts",
+                                         "type":  "dashboard"
+                                     }
+                                 ]
+                    },
+    "editable":  true,
+    "fiscalYearStartMonth":  0,
+    "graphTooltip":  0,
+    "id":  2367945748996096,
+    "liveNow":  false,
+    "panels":  [
+                   {
+                       "datasource":  {
+                                          "type":  "influxdb",
+                                          "uid":  "influxdb-pollution"
+                                      },
+                       "description":  "The Air Quality Index (AQI) is a standardized tool used by government agencies to communicate daily air pollution levels and their corresponding public health risks",
+                       "fieldConfig":  {
+                                           "defaults":  {
+                                                            "color":  {
+                                                                          "mode":  "thresholds"
+                                                                      },
+                                                            "decimals":  0,
+                                                            "displayName":  "AQI",
+                                                            "max":  600,
+                                                            "min":  0,
+                                                            "noValue":  "No data",
+                                                            "thresholds":  {
+                                                                               "mode":  "absolute",
+                                                                               "steps":  [
+                                                                                             {
+                                                                                                 "color":  "green",
+                                                                                                 "value":  0
+                                                                                             },
+                                                                                             {
+                                                                                                 "color":  "#EAB839",
+                                                                                                 "value":  100
+                                                                                             },
+                                                                                             {
+                                                                                                 "color":  "orange",
+                                                                                                 "value":  200
+                                                                                             },
+                                                                                             {
+                                                                                                 "color":  "dark-orange",
+                                                                                                 "value":  300
+                                                                                             },
+                                                                                             {
+                                                                                                 "color":  "#b336f1",
+                                                                                                 "value":  400
+                                                                                             },
+                                                                                             {
+                                                                                                 "color":  "red",
+                                                                                                 "value":  500
+                                                                                             },
+                                                                                             {
+                                                                                                 "color":  "dark-red",
+                                                                                                 "value":  600
+                                                                                             }
+                                                                                         ]
+                                                                           }
+                                                        }
+                                       },
+                       "gridPos":  {
+                                       "h":  6,
+                                       "w":  6,
+                                       "x":  0,
+                                       "y":  0
+                                   },
+                       "id":  4,
+                       "options":  {
+                                       "barShape":  "flat",
+                                       "barWidthFactor":  0.54,
+                                       "effects":  {
+                                                       "barGlow":  false,
+                                                       "centerGlow":  false,
+                                                       "gradient":  true
+                                                   },
+                                       "endpointMarker":  "point",
+                                       "minVizHeight":  75,
+                                       "minVizWidth":  75,
+                                       "orientation":  "auto",
+                                       "reduceOptions":  {
+                                                             "calcs":  [
+                                                                           "lastNotNull"
+                                                                       ],
+                                                             "fields":  "",
+                                                             "values":  false
+                                                         },
+                                       "segmentCount":  1,
+                                       "segmentSpacing":  0.3,
+                                       "shape":  "gauge",
+                                       "showThresholdLabels":  false,
+                                       "showThresholdMarkers":  true,
+                                       "sizing":  "auto",
+                                       "sparkline":  false,
+                                       "textMode":  "value_and_name"
+                                   },
+                       "pluginVersion":  "13.2.3",
+                       "targets":  [
+                                       {
+                                           "dataset":  "iox",
+                                           "datasource":  {
+                                                              "type":  "influxdb",
+                                                              "uid":  "influxdb-pollution"
+                                                          },
+                                           "editorMode":  "code",
+                                           "format":  "time_series",
+                                           "rawQuery":  true,
+                                           "rawSql":  "SELECT\r\n  time,\r\n  CASE\r\n    WHEN pm25 \u003c= 30 THEN (50.0 / 30.0) * pm25\r\n    WHEN pm25 \u003c= 60 THEN 50 + ((100.0 - 50.0) / 30.0) * (pm25 - 30)\r\n    WHEN pm25 \u003c= 90 THEN 100 + ((200.0 - 100.0) / 30.0) * (pm25 - 60)\r\n    WHEN pm25 \u003c= 120 THEN 200 + ((300.0 - 200.0) / 30.0) * (pm25 - 90)\r\n    WHEN pm25 \u003c= 250 THEN 300 + ((400.0 - 300.0) / 130.0) * (pm25 - 120)\r\n    ELSE 500\r\n  END AS aqi\r\nFROM pollution\r\nWHERE $__timeFilter(time)\r\nORDER BY time;",
+                                           "refId":  "A",
+                                           "sql":  {
+                                                       "columns":  [
+                                                                       {
+                                                                           "parameters":  [
+
+                                                                                          ],
+                                                                           "type":  "function"
+                                                                       }
+                                                                   ],
+                                                       "groupBy":  [
+                                                                       {
+                                                                           "property":  {
+                                                                                            "type":  "string"
+                                                                                        },
+                                                                           "type":  "groupBy"
+                                                                       }
+                                                                   ]
+                                                   }
+                                       }
+                                   ],
+                       "title":  "AQI",
+                       "type":  "gauge"
+                   },
+                   {
+                       "datasource":  {
+                                          "type":  "influxdb",
+                                          "uid":  "influxdb-pollution"
+                                      },
+                       "description":  "PM2.5 refers to fine atmospheric particulate matter (air pollution) with a diameter of 2.5 micrometers or less, making it roughly 30 times smaller than the width of a human hair.",
+                       "fieldConfig":  {
+                                           "defaults":  {
+                                                            "color":  {
+                                                                          "mode":  "thresholds"
+                                                                      },
+                                                            "decimals":  0,
+                                                            "max":  300,
+                                                            "min":  0,
+                                                            "thresholds":  {
+                                                                               "mode":  "absolute",
+                                                                               "steps":  [
+                                                                                             {
+                                                                                                 "color":  "green",
+                                                                                                 "value":  0
+                                                                                             },
+                                                                                             {
+                                                                                                 "color":  "#EAB839",
+                                                                                                 "value":  60
+                                                                                             },
+                                                                                             {
+                                                                                                 "color":  "dark-orange",
+                                                                                                 "value":  90
+                                                                                             },
+                                                                                             {
+                                                                                                 "color":  "red",
+                                                                                                 "value":  120
+                                                                                             },
+                                                                                             {
+                                                                                                 "color":  "#c256e6cc",
+                                                                                                 "value":  250
+                                                                                             },
+                                                                                             {
+                                                                                                 "color":  "dark-red",
+                                                                                                 "value":  300
+                                                                                             }
+                                                                                         ]
+                                                                           },
+                                                            "unit":  "conÎ¼gm3"
+                                                        }
+                                       },
+                       "gridPos":  {
+                                       "h":  6,
+                                       "w":  6,
+                                       "x":  6,
+                                       "y":  0
+                                   },
+                       "id":  3,
+                       "options":  {
+                                       "barShape":  "flat",
+                                       "barWidthFactor":  0.54,
+                                       "effects":  {
+                                                       "barGlow":  false,
+                                                       "centerGlow":  false,
+                                                       "gradient":  true
+                                                   },
+                                       "endpointMarker":  "point",
+                                       "minVizHeight":  75,
+                                       "minVizWidth":  75,
+                                       "orientation":  "auto",
+                                       "reduceOptions":  {
+                                                             "calcs":  [
+                                                                           "lastNotNull"
+                                                                       ],
+                                                             "fields":  "",
+                                                             "values":  false
+                                                         },
+                                       "segmentCount":  1,
+                                       "segmentSpacing":  0.3,
+                                       "shape":  "gauge",
+                                       "showThresholdLabels":  false,
+                                       "showThresholdMarkers":  true,
+                                       "sizing":  "auto",
+                                       "sparkline":  false,
+                                       "textMode":  "value_and_name"
+                                   },
+                       "pluginVersion":  "13.2.3",
+                       "targets":  [
+                                       {
+                                           "dataset":  "iox",
+                                           "datasource":  {
+                                                              "type":  "influxdb",
+                                                              "uid":  "influxdb-pollution"
+                                                          },
+                                           "editorMode":  "code",
+                                           "format":  "time_series",
+                                           "rawQuery":  true,
+                                           "rawSql":  "SELECT\r\n  time,\r\n  pm25 AS \"PM 2.5\"\r\nFROM pollution\r\nWHERE $__timeFilter(time)\r\nORDER BY time DESC",
+                                           "refId":  "A",
+                                           "sql":  {
+                                                       "columns":  [
+                                                                       {
+                                                                           "parameters":  [
+
+                                                                                          ],
+                                                                           "type":  "function"
+                                                                       }
+                                                                   ],
+                                                       "groupBy":  [
+                                                                       {
+                                                                           "property":  {
+                                                                                            "type":  "string"
+                                                                                        },
+                                                                           "type":  "groupBy"
+                                                                       }
+                                                                   ]
+                                                   }
+                                       }
+                                   ],
+                       "title":  "PM 2.5",
+                       "type":  "gauge"
+                   },
+                   {
+                       "datasource":  {
+                                          "type":  "influxdb",
+                                          "uid":  "influxdb-pollution"
+                                      },
+                       "description":  "PM10 refers to inhalable coarse airborne particles with a diameter of 10 micrometers (Î¼m) or less.",
+                       "fieldConfig":  {
+                                           "defaults":  {
+                                                            "color":  {
+                                                                          "mode":  "thresholds"
+                                                                      },
+                                                            "decimals":  0,
+                                                            "displayName":  "PM 10",
+                                                            "max":  700,
+                                                            "min":  0,
+                                                            "thresholds":  {
+                                                                               "mode":  "absolute",
+                                                                               "steps":  [
+                                                                                             {
+                                                                                                 "color":  "green",
+                                                                                                 "value":  0
+                                                                                             },
+                                                                                             {
+                                                                                                 "color":  "#EAB839",
+                                                                                                 "value":  100
+                                                                                             },
+                                                                                             {
+                                                                                                 "color":  "semi-dark-orange",
+                                                                                                 "value":  250
+                                                                                             },
+                                                                                             {
+                                                                                                 "color":  "red",
+                                                                                                 "value":  350
+                                                                                             },
+                                                                                             {
+                                                                                                 "color":  "dark-purple",
+                                                                                                 "value":  450
+                                                                                             },
+                                                                                             {
+                                                                                                 "color":  "dark-red",
+                                                                                                 "value":  700
+                                                                                             }
+                                                                                         ]
+                                                                           },
+                                                            "unit":  "conÎ¼gm3"
+                                                        }
+                                       },
+                       "gridPos":  {
+                                       "h":  6,
+                                       "w":  6,
+                                       "x":  12,
+                                       "y":  0
+                                   },
+                       "id":  5,
+                       "options":  {
+                                       "barShape":  "flat",
+                                       "barWidthFactor":  0.54,
+                                       "effects":  {
+                                                       "barGlow":  false,
+                                                       "centerGlow":  false,
+                                                       "gradient":  true
+                                                   },
+                                       "endpointMarker":  "point",
+                                       "minVizHeight":  75,
+                                       "minVizWidth":  75,
+                                       "orientation":  "auto",
+                                       "reduceOptions":  {
+                                                             "calcs":  [
+                                                                           "lastNotNull"
+                                                                       ],
+                                                             "fields":  "",
+                                                             "values":  false
+                                                         },
+                                       "segmentCount":  1,
+                                       "segmentSpacing":  0.3,
+                                       "shape":  "gauge",
+                                       "showThresholdLabels":  false,
+                                       "showThresholdMarkers":  true,
+                                       "sizing":  "auto",
+                                       "sparkline":  false,
+                                       "textMode":  "auto"
+                                   },
+                       "pluginVersion":  "13.2.3",
+                       "targets":  [
+                                       {
+                                           "dataset":  "iox",
+                                           "datasource":  {
+                                                              "type":  "influxdb",
+                                                              "uid":  "influxdb-pollution"
+                                                          },
+                                           "editorMode":  "code",
+                                           "format":  "time_series",
+                                           "rawQuery":  true,
+                                           "rawSql":  "SELECT\r\n  time,\r\n  pm10 AS \"PM 10\"\r\nFROM pollution\r\nWHERE $__timeFilter(time)\r\nORDER BY time",
+                                           "refId":  "A",
+                                           "sql":  {
+                                                       "columns":  [
+                                                                       {
+                                                                           "parameters":  [
+
+                                                                                          ],
+                                                                           "type":  "function"
+                                                                       }
+                                                                   ],
+                                                       "groupBy":  [
+                                                                       {
+                                                                           "property":  {
+                                                                                            "type":  "string"
+                                                                                        },
+                                                                           "type":  "groupBy"
+                                                                       }
+                                                                   ]
+                                                   }
+                                       }
+                                   ],
+                       "title":  "PM 10",
+                       "type":  "gauge"
+                   },
+                   {
+                       "datasource":  {
+                                          "type":  "influxdb",
+                                          "uid":  "influxdb-pollution"
+                                      },
+                       "fieldConfig":  {
+                                           "defaults":  {
+                                                            "color":  {
+                                                                          "fixedColor":  "#ad46ff",
+                                                                          "mode":  "thresholds"
+                                                                      },
+                                                            "min":  0,
+                                                            "thresholds":  {
+                                                                               "mode":  "absolute",
+                                                                               "steps":  [
+                                                                                             {
+                                                                                                 "color":  "green",
+                                                                                                 "value":  0
+                                                                                             },
+                                                                                             {
+                                                                                                 "color":  "red",
+                                                                                                 "value":  80
+                                                                                             }
+                                                                                         ]
+                                                                           }
+                                                        }
+                                       },
+                       "gridPos":  {
+                                       "h":  6,
+                                       "w":  6,
+                                       "x":  18,
+                                       "y":  0
+                                   },
+                       "id":  20,
+                       "options":  {
+                                       "colorMode":  "value",
+                                       "graphMode":  "area",
+                                       "justifyMode":  "auto",
+                                       "orientation":  "auto",
+                                       "percentChangeColorMode":  "standard",
+                                       "reduceOptions":  {
+                                                             "calcs":  [
+                                                                           "lastNotNull"
+                                                                       ],
+                                                             "fields":  "",
+                                                             "values":  false
+                                                         },
+                                       "showPercentChange":  false,
+                                       "textMode":  "auto",
+                                       "wideLayout":  true
+                                   },
+                       "pluginVersion":  "13.2.3",
+                       "targets":  [
+                                       {
+                                           "dataset":  "iox",
+                                           "datasource":  {
+                                                              "type":  "influxdb",
+                                                              "uid":  "influxdb-pollution"
+                                                          },
+                                           "editorMode":  "code",
+                                           "format":  "table",
+                                           "rawQuery":  true,
+                                           "rawSql":  "SELECT\r\n  COUNT(*) AS \"Active Hotspots\"\r\nFROM (\r\n  SELECT\r\n    sensor_id,\r\n    MAX(time) AS latest_time\r\n  FROM pollution\r\n  WHERE $__timeFilter(time)\r\n  GROUP BY sensor_id\r\n) latest\r\nJOIN pollution p\r\n  ON p.sensor_id = latest.sensor_id\r\n  AND p.time = latest.latest_time\r\nWHERE p.pm25 \u003e 90",
+                                           "refId":  "A",
+                                           "sql":  {
+                                                       "columns":  [
+                                                                       {
+                                                                           "parameters":  [
+
+                                                                                          ],
+                                                                           "type":  "function"
+                                                                       }
+                                                                   ],
+                                                       "groupBy":  [
+                                                                       {
+                                                                           "property":  {
+                                                                                            "type":  "string"
+                                                                                        },
+                                                                           "type":  "groupBy"
+                                                                       }
+                                                                   ]
+                                                   }
+                                       }
+                                   ],
+                       "title":  "Active Hotspots",
+                       "type":  "stat"
+                   },
+                   {
+                       "datasource":  {
+                                          "type":  "influxdb",
+                                          "uid":  "influxdb-pollution"
+                                      },
+                       "description":  "Nitrogen Dioxide (NOâ) is a highly reactive gas and a primary criteria pollutant tracked globally in the Air Quality Index (AQI). It acts as a major indicator of traffic-related air pollution and industrial smog.",
+                       "fieldConfig":  {
+                                           "defaults":  {
+                                                            "color":  {
+                                                                          "mode":  "thresholds"
+                                                                      },
+                                                            "decimals":  0,
+                                                            "displayName":  "NOâ",
+                                                            "max":  500,
+                                                            "min":  0,
+                                                            "thresholds":  {
+                                                                               "mode":  "absolute",
+                                                                               "steps":  [
+                                                                                             {
+                                                                                                 "color":  "green",
+                                                                                                 "value":  0
+                                                                                             },
+                                                                                             {
+                                                                                                 "color":  "dark-yellow",
+                                                                                                 "value":  80
+                                                                                             },
+                                                                                             {
+                                                                                                 "color":  "dark-orange",
+                                                                                                 "value":  180
+                                                                                             },
+                                                                                             {
+                                                                                                 "color":  "red",
+                                                                                                 "value":  280
+                                                                                             },
+                                                                                             {
+                                                                                                 "color":  "#c23cf0",
+                                                                                                 "value":  400
+                                                                                             },
+                                                                                             {
+                                                                                                 "color":  "dark-red",
+                                                                                                 "value":  500
+                                                                                             }
+                                                                                         ]
+                                                                           },
+                                                            "unit":  "conÎ¼gm3"
+                                                        }
+                                       },
+                       "gridPos":  {
+                                       "h":  4,
+                                       "w":  5,
+                                       "x":  0,
+                                       "y":  6
+                                   },
+                       "id":  9,
+                       "options":  {
+                                       "barShape":  "flat",
+                                       "barWidthFactor":  0.54,
+                                       "effects":  {
+                                                       "barGlow":  false,
+                                                       "centerGlow":  false,
+                                                       "gradient":  true
+                                                   },
+                                       "endpointMarker":  "point",
+                                       "minVizHeight":  75,
+                                       "minVizWidth":  75,
+                                       "orientation":  "auto",
+                                       "reduceOptions":  {
+                                                             "calcs":  [
+                                                                           "lastNotNull"
+                                                                       ],
+                                                             "fields":  "",
+                                                             "values":  false
+                                                         },
+                                       "segmentCount":  1,
+                                       "segmentSpacing":  0.3,
+                                       "shape":  "gauge",
+                                       "showThresholdLabels":  false,
+                                       "showThresholdMarkers":  true,
+                                       "sizing":  "auto",
+                                       "sparkline":  false,
+                                       "textMode":  "auto"
+                                   },
+                       "pluginVersion":  "13.2.3",
+                       "targets":  [
+                                       {
+                                           "dataset":  "iox",
+                                           "datasource":  {
+                                                              "type":  "influxdb",
+                                                              "uid":  "influxdb-pollution"
+                                                          },
+                                           "editorMode":  "code",
+                                           "format":  "time_series",
+                                           "rawQuery":  true,
+                                           "rawSql":  "SELECT\r\n  time,\r\n  no2\r\nFROM pollution\r\nWHERE $__timeFilter(time)\r\nORDER BY time",
+                                           "refId":  "A",
+                                           "sql":  {
+                                                       "columns":  [
+                                                                       {
+                                                                           "parameters":  [
+
+                                                                                          ],
+                                                                           "type":  "function"
+                                                                       }
+                                                                   ],
+                                                       "groupBy":  [
+                                                                       {
+                                                                           "property":  {
+                                                                                            "type":  "string"
+                                                                                        },
+                                                                           "type":  "groupBy"
+                                                                       }
+                                                                   ]
+                                                   }
+                                       }
+                                   ],
+                       "title":  "NO2",
+                       "type":  "gauge"
+                   },
+                   {
+                       "datasource":  {
+                                          "type":  "influxdb",
+                                          "uid":  "influxdb-pollution"
+                                      },
+                       "description":  "Ground-level Ozone (Oâ) is a highly reactive gas that serves as a core criteria pollutant in the Air Quality Index (AQI). Unlike other pollutants, it is not emitted directly into the air but is created by chemical reactions.",
+                       "fieldConfig":  {
+                                           "defaults":  {
+                                                            "color":  {
+                                                                          "mode":  "thresholds"
+                                                                      },
+                                                            "decimals":  0,
+                                                            "displayName":  "Oâ",
+                                                            "max":  750,
+                                                            "min":  0,
+                                                            "thresholds":  {
+                                                                               "mode":  "absolute",
+                                                                               "steps":  [
+                                                                                             {
+                                                                                                 "color":  "green",
+                                                                                                 "value":  0
+                                                                                             },
+                                                                                             {
+                                                                                                 "color":  "#EAB839",
+                                                                                                 "value":  100
+                                                                                             },
+                                                                                             {
+                                                                                                 "color":  "dark-orange",
+                                                                                                 "value":  168
+                                                                                             },
+                                                                                             {
+                                                                                                 "color":  "red",
+                                                                                                 "value":  208
+                                                                                             },
+                                                                                             {
+                                                                                                 "color":  "#c342e3",
+                                                                                                 "value":  748
+                                                                                             },
+                                                                                             {
+                                                                                                 "color":  "dark-red",
+                                                                                                 "value":  800
+                                                                                             }
+                                                                                         ]
+                                                                           },
+                                                            "unit":  "conÎ¼gm3"
+                                                        }
+                                       },
+                       "gridPos":  {
+                                       "h":  4,
+                                       "w":  5,
+                                       "x":  5,
+                                       "y":  6
+                                   },
+                       "id":  10,
+                       "options":  {
+                                       "barShape":  "flat",
+                                       "barWidthFactor":  0.54,
+                                       "effects":  {
+                                                       "barGlow":  false,
+                                                       "centerGlow":  false,
+                                                       "gradient":  true
+                                                   },
+                                       "endpointMarker":  "point",
+                                       "minVizHeight":  75,
+                                       "minVizWidth":  75,
+                                       "orientation":  "auto",
+                                       "reduceOptions":  {
+                                                             "calcs":  [
+                                                                           "lastNotNull"
+                                                                       ],
+                                                             "fields":  "",
+                                                             "values":  false
+                                                         },
+                                       "segmentCount":  1,
+                                       "segmentSpacing":  0.3,
+                                       "shape":  "gauge",
+                                       "showThresholdLabels":  false,
+                                       "showThresholdMarkers":  true,
+                                       "sizing":  "auto",
+                                       "sparkline":  false,
+                                       "textMode":  "auto"
+                                   },
+                       "pluginVersion":  "13.2.3",
+                       "targets":  [
+                                       {
+                                           "dataset":  "iox",
+                                           "datasource":  {
+                                                              "type":  "influxdb",
+                                                              "uid":  "influxdb-pollution"
+                                                          },
+                                           "editorMode":  "code",
+                                           "format":  "time_series",
+                                           "rawQuery":  true,
+                                           "rawSql":  "SELECT\r\n  time,\r\n  o3\r\nFROM pollution\r\nWHERE $__timeFilter(time)\r\nORDER BY time",
+                                           "refId":  "A",
+                                           "sql":  {
+                                                       "columns":  [
+                                                                       {
+                                                                           "parameters":  [
+
+                                                                                          ],
+                                                                           "type":  "function"
+                                                                       }
+                                                                   ],
+                                                       "groupBy":  [
+                                                                       {
+                                                                           "property":  {
+                                                                                            "type":  "string"
+                                                                                        },
+                                                                           "type":  "groupBy"
+                                                                       }
+                                                                   ]
+                                                   }
+                                       }
+                                   ],
+                       "title":  "Oâ",
+                       "type":  "gauge"
+                   },
+                   {
+                       "datasource":  {
+                                          "type":  "influxdb",
+                                          "uid":  "influxdb-pollution"
+                                      },
+                       "description":  "Carbon Monoxide (CO) is a colorless, odorless, and tasteless gas tracked as a critical criteria pollutant in the Air Quality Index (AQI). Because it is completely undetectable by human senses, it is often referred to as a \"silent killer\" in high",
+                       "fieldConfig":  {
+                                           "defaults":  {
+                                                            "color":  {
+                                                                          "mode":  "thresholds"
+                                                                      },
+                                                            "decimals":  2,
+                                                            "displayName":  "CO",
+                                                            "max":  5,
+                                                            "min":  0,
+                                                            "noValue":  "No data",
+                                                            "thresholds":  {
+                                                                               "mode":  "absolute",
+                                                                               "steps":  [
+                                                                                             {
+                                                                                                 "color":  "green",
+                                                                                                 "value":  0
+                                                                                             },
+                                                                                             {
+                                                                                                 "color":  "dark-yellow",
+                                                                                                 "value":  2
+                                                                                             },
+                                                                                             {
+                                                                                                 "color":  "dark-orange",
+                                                                                                 "value":  4
+                                                                                             },
+                                                                                             {
+                                                                                                 "color":  "semi-dark-purple",
+                                                                                                 "value":  5
+                                                                                             },
+                                                                                             {
+                                                                                                 "color":  "dark-red",
+                                                                                                 "value":  7
+                                                                                             }
+                                                                                         ]
+                                                                           },
+                                                            "unit":  "ppm"
+                                                        }
+                                       },
+                       "gridPos":  {
+                                       "h":  4,
+                                       "w":  5,
+                                       "x":  10,
+                                       "y":  6
+                                   },
+                       "id":  11,
+                       "options":  {
+                                       "barShape":  "flat",
+                                       "barWidthFactor":  0.54,
+                                       "effects":  {
+                                                       "barGlow":  false,
+                                                       "centerGlow":  false,
+                                                       "gradient":  true
+                                                   },
+                                       "endpointMarker":  "point",
+                                       "minVizHeight":  75,
+                                       "minVizWidth":  75,
+                                       "orientation":  "auto",
+                                       "reduceOptions":  {
+                                                             "calcs":  [
+                                                                           "lastNotNull"
+                                                                       ],
+                                                             "fields":  "",
+                                                             "values":  false
+                                                         },
+                                       "segmentCount":  1,
+                                       "segmentSpacing":  0.3,
+                                       "shape":  "gauge",
+                                       "showThresholdLabels":  false,
+                                       "showThresholdMarkers":  true,
+                                       "sizing":  "auto",
+                                       "sparkline":  false,
+                                       "textMode":  "auto"
+                                   },
+                       "pluginVersion":  "13.2.3",
+                       "targets":  [
+                                       {
+                                           "dataset":  "iox",
+                                           "datasource":  {
+                                                              "type":  "influxdb",
+                                                              "uid":  "influxdb-pollution"
+                                                          },
+                                           "editorMode":  "code",
+                                           "format":  "time_series",
+                                           "rawQuery":  true,
+                                           "rawSql":  "SELECT\r\n  time,\r\n  co\r\nFROM pollution\r\nWHERE $__timeFilter(time)\r\nORDER BY time",
+                                           "refId":  "A",
+                                           "sql":  {
+                                                       "columns":  [
+                                                                       {
+                                                                           "parameters":  [
+
+                                                                                          ],
+                                                                           "type":  "function"
+                                                                       }
+                                                                   ],
+                                                       "groupBy":  [
+                                                                       {
+                                                                           "property":  {
+                                                                                            "type":  "string"
+                                                                                        },
+                                                                           "type":  "groupBy"
+                                                                       }
+                                                                   ]
+                                                   }
+                                       }
+                                   ],
+                       "title":  "CO",
+                       "type":  "gauge"
+                   },
+                   {
+                       "datasource":  {
+                                          "type":  "influxdb",
+                                          "uid":  "influxdb-pollution"
+                                      },
+                       "description":  "Temperature is a critical meteorological factor that heavily influences the Air Quality Index (AQI), affecting how air pollutants disperse, react, and accumulate in the atmosphere.",
+                       "fieldConfig":  {
+                                           "defaults":  {
+                                                            "color":  {
+                                                                          "mode":  "thresholds"
+                                                                      },
+                                                            "decimals":  1,
+                                                            "displayName":  "Temp.",
+                                                            "max":  50,
+                                                            "min":  0,
+                                                            "noValue":  "No data",
+                                                            "thresholds":  {
+                                                                               "mode":  "absolute",
+                                                                               "steps":  [
+                                                                                             {
+                                                                                                 "color":  "dark-green",
+                                                                                                 "value":  0
+                                                                                             },
+                                                                                             {
+                                                                                                 "color":  "semi-dark-green",
+                                                                                                 "value":  20
+                                                                                             },
+                                                                                             {
+                                                                                                 "color":  "#c7e864",
+                                                                                                 "value":  30
+                                                                                             },
+                                                                                             {
+                                                                                                 "color":  "dark-orange",
+                                                                                                 "value":  40
+                                                                                             },
+                                                                                             {
+                                                                                                 "color":  "dark-red",
+                                                                                                 "value":  50
+                                                                                             }
+                                                                                         ]
+                                                                           },
+                                                            "unit":  "celsius"
+                                                        }
+                                       },
+                       "gridPos":  {
+                                       "h":  4,
+                                       "w":  5,
+                                       "x":  15,
+                                       "y":  6
+                                   },
+                       "id":  12,
+                       "options":  {
+                                       "barShape":  "flat",
+                                       "barWidthFactor":  0.54,
+                                       "effects":  {
+                                                       "barGlow":  false,
+                                                       "centerGlow":  false,
+                                                       "gradient":  true
+                                                   },
+                                       "endpointMarker":  "point",
+                                       "minVizHeight":  75,
+                                       "minVizWidth":  75,
+                                       "orientation":  "auto",
+                                       "reduceOptions":  {
+                                                             "calcs":  [
+                                                                           "lastNotNull"
+                                                                       ],
+                                                             "fields":  "",
+                                                             "values":  false
+                                                         },
+                                       "segmentCount":  1,
+                                       "segmentSpacing":  0.3,
+                                       "shape":  "gauge",
+                                       "showThresholdLabels":  false,
+                                       "showThresholdMarkers":  true,
+                                       "sizing":  "auto",
+                                       "sparkline":  false,
+                                       "textMode":  "auto"
+                                   },
+                       "pluginVersion":  "13.2.3",
+                       "targets":  [
+                                       {
+                                           "dataset":  "iox",
+                                           "datasource":  {
+                                                              "type":  "influxdb",
+                                                              "uid":  "influxdb-pollution"
+                                                          },
+                                           "editorMode":  "code",
+                                           "format":  "time_series",
+                                           "rawQuery":  true,
+                                           "rawSql":  "SELECT\r\n  time,\r\n  temperature\r\nFROM pollution\r\nWHERE $__timeFilter(time)\r\nORDER BY time",
+                                           "refId":  "A",
+                                           "sql":  {
+                                                       "columns":  [
+                                                                       {
+                                                                           "parameters":  [
+
+                                                                                          ],
+                                                                           "type":  "function"
+                                                                       }
+                                                                   ],
+                                                       "groupBy":  [
+                                                                       {
+                                                                           "property":  {
+                                                                                            "type":  "string"
+                                                                                        },
+                                                                           "type":  "groupBy"
+                                                                       }
+                                                                   ]
+                                                   }
+                                       }
+                                   ],
+                       "title":  "Temperature",
+                       "type":  "gauge"
+                   },
+                   {
+                       "datasource":  {
+                                          "type":  "influxdb",
+                                          "uid":  "influxdb-pollution"
+                                      },
+                       "description":  "Humidityâthe amount of water vapor in the airâprofoundly alters the concentrations, chemical structures, and behavior of critical Air Quality Index (AQI) parameters.",
+                       "fieldConfig":  {
+                                           "defaults":  {
+                                                            "color":  {
+                                                                          "mode":  "thresholds"
+                                                                      },
+                                                            "displayName":  "Humidity",
+                                                            "max":  100,
+                                                            "min":  0,
+                                                            "thresholds":  {
+                                                                               "mode":  "absolute",
+                                                                               "steps":  [
+                                                                                             {
+                                                                                                 "color":  "dark-blue",
+                                                                                                 "value":  0
+                                                                                             },
+                                                                                             {
+                                                                                                 "color":  "semi-dark-blue",
+                                                                                                 "value":  60
+                                                                                             },
+                                                                                             {
+                                                                                                 "color":  "dark-yellow",
+                                                                                                 "value":  80
+                                                                                             },
+                                                                                             {
+                                                                                                 "color":  "semi-dark-orange",
+                                                                                                 "value":  100
+                                                                                             }
+                                                                                         ]
+                                                                           }
+                                                        }
+                                       },
+                       "gridPos":  {
+                                       "h":  4,
+                                       "w":  4,
+                                       "x":  20,
+                                       "y":  6
+                                   },
+                       "id":  13,
+                       "options":  {
+                                       "barShape":  "flat",
+                                       "barWidthFactor":  0.54,
+                                       "effects":  {
+                                                       "barGlow":  false,
+                                                       "centerGlow":  false,
+                                                       "gradient":  true
+                                                   },
+                                       "endpointMarker":  "point",
+                                       "minVizHeight":  75,
+                                       "minVizWidth":  75,
+                                       "orientation":  "auto",
+                                       "reduceOptions":  {
+                                                             "calcs":  [
+                                                                           "lastNotNull"
+                                                                       ],
+                                                             "fields":  "",
+                                                             "values":  false
+                                                         },
+                                       "segmentCount":  1,
+                                       "segmentSpacing":  0.3,
+                                       "shape":  "gauge",
+                                       "showThresholdLabels":  false,
+                                       "showThresholdMarkers":  true,
+                                       "sizing":  "auto",
+                                       "sparkline":  false,
+                                       "textMode":  "auto"
+                                   },
+                       "pluginVersion":  "13.2.3",
+                       "targets":  [
+                                       {
+                                           "dataset":  "iox",
+                                           "datasource":  {
+                                                              "type":  "influxdb",
+                                                              "uid":  "influxdb-pollution"
+                                                          },
+                                           "editorMode":  "code",
+                                           "format":  "time_series",
+                                           "rawQuery":  true,
+                                           "rawSql":  "SELECT\r\n  time,\r\n  humidity\r\nFROM pollution\r\nWHERE $__timeFilter(time)\r\nORDER BY time",
+                                           "refId":  "A",
+                                           "sql":  {
+                                                       "columns":  [
+                                                                       {
+                                                                           "parameters":  [
+
+                                                                                          ],
+                                                                           "type":  "function"
+                                                                       }
+                                                                   ],
+                                                       "groupBy":  [
+                                                                       {
+                                                                           "property":  {
+                                                                                            "type":  "string"
+                                                                                        },
+                                                                           "type":  "groupBy"
+                                                                       }
+                                                                   ]
+                                                   }
+                                       }
+                                   ],
+                       "title":  "Humidity",
+                       "type":  "gauge"
+                   },
+                   {
+                       "datasource":  {
+                                          "type":  "influxdb",
+                                          "uid":  "influxdb-pollution"
+                                      },
+                       "fieldConfig":  {
+                                           "defaults":  {
+                                                            "color":  {
+                                                                          "mode":  "continuous-GrYlRd",
+                                                                          "seriesBy":  "last"
+                                                                      },
+                                                            "custom":  {
+                                                                           "axisBorderShow":  false,
+                                                                           "axisCenteredZero":  false,
+                                                                           "axisColorMode":  "text",
+                                                                           "axisLabel":  "",
+                                                                           "axisPlacement":  "auto",
+                                                                           "barAlignment":  0,
+                                                                           "barWidthFactor":  0.6,
+                                                                           "drawStyle":  "line",
+                                                                           "fillOpacity":  17,
+                                                                           "gradientMode":  "scheme",
+                                                                           "hideFrom":  {
+                                                                                            "legend":  false,
+                                                                                            "tooltip":  false,
+                                                                                            "viz":  false
+                                                                                        },
+                                                                           "insertNulls":  false,
+                                                                           "lineInterpolation":  "linear",
+                                                                           "lineStyle":  {
+                                                                                             "fill":  "solid"
+                                                                                         },
+                                                                           "lineWidth":  2,
+                                                                           "pointSize":  3,
+                                                                           "scaleDistribution":  {
+                                                                                                     "type":  "linear"
+                                                                                                 },
+                                                                           "showPoints":  "auto",
+                                                                           "showValues":  false,
+                                                                           "spanNulls":  false,
+                                                                           "stacking":  {
+                                                                                            "group":  "A",
+                                                                                            "mode":  "none"
+                                                                                        },
+                                                                           "thresholdsStyle":  {
+                                                                                                   "mode":  "line+area"
+                                                                                               }
+                                                                       },
+                                                            "decimals":  1,
+                                                            "displayName":  "PM 2.5",
+                                                            "max":  300,
+                                                            "min":  0,
+                                                            "thresholds":  {
+                                                                               "mode":  "absolute",
+                                                                               "steps":  [
+                                                                                             {
+                                                                                                 "color":  "green",
+                                                                                                 "value":  0
+                                                                                             },
+                                                                                             {
+                                                                                                 "color":  "#bbe086",
+                                                                                                 "value":  60
+                                                                                             },
+                                                                                             {
+                                                                                                 "color":  "dark-yellow",
+                                                                                                 "value":  90
+                                                                                             },
+                                                                                             {
+                                                                                                 "color":  "red",
+                                                                                                 "value":  150
+                                                                                             },
+                                                                                             {
+                                                                                                 "color":  "semi-dark-purple",
+                                                                                                 "value":  250
+                                                                                             },
+                                                                                             {
+                                                                                                 "color":  "dark-red",
+                                                                                                 "value":  300
+                                                                                             }
+                                                                                         ]
+                                                                           },
+                                                            "unit":  "conÎ¼gm3"
+                                                        }
+                                       },
+                       "gridPos":  {
+                                       "h":  8,
+                                       "w":  12,
+                                       "x":  0,
+                                       "y":  10
+                                   },
+                       "id":  14,
+                       "options":  {
+                                       "legend":  {
+                                                      "calcs":  [
+
+                                                                ],
+                                                      "displayMode":  "list",
+                                                      "placement":  "bottom",
+                                                      "showLegend":  true
+                                                  },
+                                       "tooltip":  {
+                                                       "hideZeros":  false,
+                                                       "mode":  "single",
+                                                       "sort":  "none"
+                                                   }
+                                   },
+                       "pluginVersion":  "13.2.3",
+                       "targets":  [
+                                       {
+                                           "dataset":  "iox",
+                                           "datasource":  {
+                                                              "type":  "influxdb",
+                                                              "uid":  "influxdb-pollution"
+                                                          },
+                                           "editorMode":  "code",
+                                           "format":  "time_series",
+                                           "rawQuery":  true,
+                                           "rawSql":  "SELECT\r\n  time,\r\n  pm25\r\nFROM pollution\r\nWHERE $__timeFilter(time)\r\nORDER BY time",
+                                           "refId":  "A",
+                                           "sql":  {
+                                                       "columns":  [
+                                                                       {
+                                                                           "parameters":  [
+
+                                                                                          ],
+                                                                           "type":  "function"
+                                                                       }
+                                                                   ],
+                                                       "groupBy":  [
+                                                                       {
+                                                                           "property":  {
+                                                                                            "type":  "string"
+                                                                                        },
+                                                                           "type":  "groupBy"
+                                                                       }
+                                                                   ]
+                                                   }
+                                       }
+                                   ],
+                       "title":  "PM 2.5 Trend",
+                       "type":  "timeseries"
+                   },
+                   {
+                       "datasource":  {
+                                          "type":  "influxdb",
+                                          "uid":  "influxdb-pollution"
+                                      },
+                       "fieldConfig":  {
+                                           "defaults":  {
+                                                            "color":  {
+                                                                          "mode":  "continuous-GrYlRd",
+                                                                          "seriesBy":  "last"
+                                                                      },
+                                                            "custom":  {
+                                                                           "axisBorderShow":  false,
+                                                                           "axisCenteredZero":  false,
+                                                                           "axisColorMode":  "text",
+                                                                           "axisLabel":  "",
+                                                                           "axisPlacement":  "auto",
+                                                                           "barAlignment":  0,
+                                                                           "barWidthFactor":  0.6,
+                                                                           "drawStyle":  "line",
+                                                                           "fillOpacity":  17,
+                                                                           "gradientMode":  "scheme",
+                                                                           "hideFrom":  {
+                                                                                            "legend":  false,
+                                                                                            "tooltip":  false,
+                                                                                            "viz":  false
+                                                                                        },
+                                                                           "insertNulls":  false,
+                                                                           "lineInterpolation":  "linear",
+                                                                           "lineStyle":  {
+                                                                                             "fill":  "solid"
+                                                                                         },
+                                                                           "lineWidth":  2,
+                                                                           "pointSize":  3,
+                                                                           "scaleDistribution":  {
+                                                                                                     "type":  "linear"
+                                                                                                 },
+                                                                           "showPoints":  "auto",
+                                                                           "showValues":  false,
+                                                                           "spanNulls":  false,
+                                                                           "stacking":  {
+                                                                                            "group":  "A",
+                                                                                            "mode":  "none"
+                                                                                        },
+                                                                           "thresholdsStyle":  {
+                                                                                                   "mode":  "line+area"
+                                                                                               }
+                                                                       },
+                                                            "decimals":  1,
+                                                            "displayName":  "PM 10",
+                                                            "max":  430,
+                                                            "min":  0,
+                                                            "thresholds":  {
+                                                                               "mode":  "absolute",
+                                                                               "steps":  [
+                                                                                             {
+                                                                                                 "color":  "green",
+                                                                                                 "value":  0
+                                                                                             },
+                                                                                             {
+                                                                                                 "color":  "#bbe086",
+                                                                                                 "value":  50
+                                                                                             },
+                                                                                             {
+                                                                                                 "color":  "dark-yellow",
+                                                                                                 "value":  100
+                                                                                             },
+                                                                                             {
+                                                                                                 "color":  "red",
+                                                                                                 "value":  250
+                                                                                             },
+                                                                                             {
+                                                                                                 "color":  "semi-dark-purple",
+                                                                                                 "value":  350
+                                                                                             },
+                                                                                             {
+                                                                                                 "color":  "dark-red",
+                                                                                                 "value":  430
+                                                                                             }
+                                                                                         ]
+                                                                           },
+                                                            "unit":  "conÎ¼gm3"
+                                                        }
+                                       },
+                       "gridPos":  {
+                                       "h":  8,
+                                       "w":  12,
+                                       "x":  12,
+                                       "y":  10
+                                   },
+                       "id":  15,
+                       "options":  {
+                                       "legend":  {
+                                                      "calcs":  [
+
+                                                                ],
+                                                      "displayMode":  "list",
+                                                      "placement":  "bottom",
+                                                      "showLegend":  true
+                                                  },
+                                       "tooltip":  {
+                                                       "hideZeros":  false,
+                                                       "mode":  "single",
+                                                       "sort":  "none"
+                                                   }
+                                   },
+                       "pluginVersion":  "13.2.3",
+                       "targets":  [
+                                       {
+                                           "dataset":  "iox",
+                                           "datasource":  {
+                                                              "type":  "influxdb",
+                                                              "uid":  "influxdb-pollution"
+                                                          },
+                                           "editorMode":  "code",
+                                           "format":  "time_series",
+                                           "rawQuery":  true,
+                                           "rawSql":  "SELECT\r\n  time,\r\n  pm10\r\nFROM pollution\r\nWHERE $__timeFilter(time)\r\nORDER BY time",
+                                           "refId":  "A",
+                                           "sql":  {
+                                                       "columns":  [
+                                                                       {
+                                                                           "parameters":  [
+
+                                                                                          ],
+                                                                           "type":  "function"
+                                                                       }
+                                                                   ],
+                                                       "groupBy":  [
+                                                                       {
+                                                                           "property":  {
+                                                                                            "type":  "string"
+                                                                                        },
+                                                                           "type":  "groupBy"
+                                                                       }
+                                                                   ]
+                                                   }
+                                       }
+                                   ],
+                       "title":  "PM 10 Trend",
+                       "type":  "timeseries"
+                   },
+                   {
+                       "datasource":  {
+                                          "type":  "influxdb",
+                                          "uid":  "influxdb-pollution"
+                                      },
+                       "fieldConfig":  {
+                                           "defaults":  {
+                                                            "color":  {
+                                                                          "mode":  "continuous-GrYlRd",
+                                                                          "seriesBy":  "last"
+                                                                      },
+                                                            "custom":  {
+                                                                           "axisBorderShow":  false,
+                                                                           "axisCenteredZero":  false,
+                                                                           "axisColorMode":  "text",
+                                                                           "axisLabel":  "",
+                                                                           "axisPlacement":  "auto",
+                                                                           "barAlignment":  0,
+                                                                           "barWidthFactor":  0.6,
+                                                                           "drawStyle":  "line",
+                                                                           "fillOpacity":  17,
+                                                                           "gradientMode":  "scheme",
+                                                                           "hideFrom":  {
+                                                                                            "legend":  false,
+                                                                                            "tooltip":  false,
+                                                                                            "viz":  false
+                                                                                        },
+                                                                           "insertNulls":  false,
+                                                                           "lineInterpolation":  "linear",
+                                                                           "lineStyle":  {
+                                                                                             "fill":  "solid"
+                                                                                         },
+                                                                           "lineWidth":  2,
+                                                                           "pointSize":  3,
+                                                                           "scaleDistribution":  {
+                                                                                                     "type":  "linear"
+                                                                                                 },
+                                                                           "showPoints":  "auto",
+                                                                           "showValues":  false,
+                                                                           "spanNulls":  false,
+                                                                           "stacking":  {
+                                                                                            "group":  "A",
+                                                                                            "mode":  "none"
+                                                                                        },
+                                                                           "thresholdsStyle":  {
+                                                                                                   "mode":  "line+area"
+                                                                                               }
+                                                                       },
+                                                            "decimals":  1,
+                                                            "displayName":  "NOâ",
+                                                            "max":  400,
+                                                            "min":  0,
+                                                            "thresholds":  {
+                                                                               "mode":  "absolute",
+                                                                               "steps":  [
+                                                                                             {
+                                                                                                 "color":  "green",
+                                                                                                 "value":  0
+                                                                                             },
+                                                                                             {
+                                                                                                 "color":  "#bbe086",
+                                                                                                 "value":  40
+                                                                                             },
+                                                                                             {
+                                                                                                 "color":  "dark-yellow",
+                                                                                                 "value":  80
+                                                                                             },
+                                                                                             {
+                                                                                                 "color":  "red",
+                                                                                                 "value":  180
+                                                                                             },
+                                                                                             {
+                                                                                                 "color":  "semi-dark-purple",
+                                                                                                 "value":  280
+                                                                                             },
+                                                                                             {
+                                                                                                 "color":  "dark-red",
+                                                                                                 "value":  400
+                                                                                             }
+                                                                                         ]
+                                                                           },
+                                                            "unit":  "conÎ¼gm3"
+                                                        }
+                                       },
+                       "gridPos":  {
+                                       "h":  8,
+                                       "w":  12,
+                                       "x":  0,
+                                       "y":  18
+                                   },
+                       "id":  16,
+                       "options":  {
+                                       "legend":  {
+                                                      "calcs":  [
+
+                                                                ],
+                                                      "displayMode":  "list",
+                                                      "placement":  "bottom",
+                                                      "showLegend":  true
+                                                  },
+                                       "tooltip":  {
+                                                       "hideZeros":  false,
+                                                       "mode":  "single",
+                                                       "sort":  "none"
+                                                   }
+                                   },
+                       "pluginVersion":  "13.2.3",
+                       "targets":  [
+                                       {
+                                           "dataset":  "iox",
+                                           "datasource":  {
+                                                              "type":  "influxdb",
+                                                              "uid":  "influxdb-pollution"
+                                                          },
+                                           "editorMode":  "code",
+                                           "format":  "time_series",
+                                           "rawQuery":  true,
+                                           "rawSql":  "SELECT\r\n  time,\r\n  pm10\r\nFROM pollution\r\nWHERE $__timeFilter(time)\r\nORDER BY time",
+                                           "refId":  "A",
+                                           "sql":  {
+                                                       "columns":  [
+                                                                       {
+                                                                           "parameters":  [
+
+                                                                                          ],
+                                                                           "type":  "function"
+                                                                       }
+                                                                   ],
+                                                       "groupBy":  [
+                                                                       {
+                                                                           "property":  {
+                                                                                            "type":  "string"
+                                                                                        },
+                                                                           "type":  "groupBy"
+                                                                       }
+                                                                   ]
+                                                   }
+                                       }
+                                   ],
+                       "title":  "NOâ Trend",
+                       "type":  "timeseries"
+                   },
+                   {
+                       "datasource":  {
+                                          "type":  "influxdb",
+                                          "uid":  "influxdb-pollution"
+                                      },
+                       "fieldConfig":  {
+                                           "defaults":  {
+                                                            "color":  {
+                                                                          "mode":  "continuous-GrYlRd",
+                                                                          "seriesBy":  "last"
+                                                                      },
+                                                            "custom":  {
+                                                                           "axisBorderShow":  false,
+                                                                           "axisCenteredZero":  false,
+                                                                           "axisColorMode":  "text",
+                                                                           "axisLabel":  "",
+                                                                           "axisPlacement":  "auto",
+                                                                           "barAlignment":  0,
+                                                                           "barWidthFactor":  0.6,
+                                                                           "drawStyle":  "line",
+                                                                           "fillOpacity":  17,
+                                                                           "gradientMode":  "scheme",
+                                                                           "hideFrom":  {
+                                                                                            "legend":  false,
+                                                                                            "tooltip":  false,
+                                                                                            "viz":  false
+                                                                                        },
+                                                                           "insertNulls":  false,
+                                                                           "lineInterpolation":  "smooth",
+                                                                           "lineStyle":  {
+                                                                                             "fill":  "solid"
+                                                                                         },
+                                                                           "lineWidth":  2,
+                                                                           "pointSize":  3,
+                                                                           "scaleDistribution":  {
+                                                                                                     "type":  "linear"
+                                                                                                 },
+                                                                           "showPoints":  "auto",
+                                                                           "showValues":  false,
+                                                                           "spanNulls":  false,
+                                                                           "stacking":  {
+                                                                                            "group":  "A",
+                                                                                            "mode":  "none"
+                                                                                        },
+                                                                           "thresholdsStyle":  {
+                                                                                                   "mode":  "line+area"
+                                                                                               }
+                                                                       },
+                                                            "decimals":  0,
+                                                            "displayName":  "Oâ",
+                                                            "max":  748,
+                                                            "min":  0,
+                                                            "thresholds":  {
+                                                                               "mode":  "absolute",
+                                                                               "steps":  [
+                                                                                             {
+                                                                                                 "color":  "green",
+                                                                                                 "value":  0
+                                                                                             },
+                                                                                             {
+                                                                                                 "color":  "#bbe086",
+                                                                                                 "value":  50
+                                                                                             },
+                                                                                             {
+                                                                                                 "color":  "dark-yellow",
+                                                                                                 "value":  100
+                                                                                             },
+                                                                                             {
+                                                                                                 "color":  "red",
+                                                                                                 "value":  168
+                                                                                             },
+                                                                                             {
+                                                                                                 "color":  "semi-dark-purple",
+                                                                                                 "value":  208
+                                                                                             },
+                                                                                             {
+                                                                                                 "color":  "dark-red",
+                                                                                                 "value":  748
+                                                                                             }
+                                                                                         ]
+                                                                           },
+                                                            "unit":  "conÎ¼gm3"
+                                                        }
+                                       },
+                       "gridPos":  {
+                                       "h":  8,
+                                       "w":  12,
+                                       "x":  12,
+                                       "y":  18
+                                   },
+                       "id":  17,
+                       "options":  {
+                                       "legend":  {
+                                                      "calcs":  [
+
+                                                                ],
+                                                      "displayMode":  "list",
+                                                      "enableFacetedFilter":  false,
+                                                      "placement":  "bottom",
+                                                      "showLegend":  true
+                                                  },
+                                       "tooltip":  {
+                                                       "hideZeros":  false,
+                                                       "hoverProximity":  50,
+                                                       "mode":  "single",
+                                                       "sort":  "none"
+                                                   }
+                                   },
+                       "pluginVersion":  "13.2.3",
+                       "targets":  [
+                                       {
+                                           "dataset":  "iox",
+                                           "datasource":  {
+                                                              "type":  "influxdb",
+                                                              "uid":  "influxdb-pollution"
+                                                          },
+                                           "editorMode":  "code",
+                                           "format":  "time_series",
+                                           "rawQuery":  true,
+                                           "rawSql":  "SELECT\r\n  time,\r\n  o3\r\nFROM pollution\r\nWHERE $__timeFilter(time)\r\nORDER BY time",
+                                           "refId":  "A",
+                                           "sql":  {
+                                                       "columns":  [
+                                                                       {
+                                                                           "parameters":  [
+
+                                                                                          ],
+                                                                           "type":  "function"
+                                                                       }
+                                                                   ],
+                                                       "groupBy":  [
+                                                                       {
+                                                                           "property":  {
+                                                                                            "type":  "string"
+                                                                                        },
+                                                                           "type":  "groupBy"
+                                                                       }
+                                                                   ]
+                                                   }
+                                       }
+                                   ],
+                       "title":  "Oâ Trend",
+                       "type":  "timeseries"
+                   },
+                   {
+                       "datasource":  {
+                                          "type":  "influxdb",
+                                          "uid":  "influxdb-pollution"
+                                      },
+                       "fieldConfig":  {
+                                           "defaults":  {
+                                                            "color":  {
+                                                                          "mode":  "thresholds"
+                                                                      },
+                                                            "custom":  {
+                                                                           "hideFrom":  {
+                                                                                            "legend":  false,
+                                                                                            "tooltip":  false,
+                                                                                            "viz":  false
+                                                                                        }
+                                                                       },
+                                                            "thresholds":  {
+                                                                               "mode":  "absolute",
+                                                                               "steps":  [
+                                                                                             {
+                                                                                                 "color":  "green",
+                                                                                                 "value":  0
+                                                                                             },
+                                                                                             {
+                                                                                                 "color":  "dark-yellow",
+                                                                                                 "value":  30
+                                                                                             },
+                                                                                             {
+                                                                                                 "color":  "dark-orange",
+                                                                                                 "value":  60
+                                                                                             },
+                                                                                             {
+                                                                                                 "color":  "red",
+                                                                                                 "value":  90
+                                                                                             },
+                                                                                             {
+                                                                                                 "color":  "semi-dark-purple",
+                                                                                                 "value":  120
+                                                                                             },
+                                                                                             {
+                                                                                                 "color":  "dark-red",
+                                                                                                 "value":  250
+                                                                                             }
+                                                                                         ]
+                                                                           }
+                                                        }
+                                       },
+                       "gridPos":  {
+                                       "h":  13,
+                                       "w":  24,
+                                       "x":  0,
+                                       "y":  26
+                                   },
+                       "id":  18,
+                       "options":  {
+                                       "basemap":  {
+                                                       "config":  {
+
+                                                                  },
+                                                       "name":  "Layer 0",
+                                                       "noRepeat":  false,
+                                                       "type":  "default"
+                                                   },
+                                       "controls":  {
+                                                        "mouseWheelZoom":  true,
+                                                        "showAttribution":  true,
+                                                        "showDebug":  false,
+                                                        "showMeasure":  false,
+                                                        "showScale":  false,
+                                                        "showZoom":  true
+                                                    },
+                                       "layers":  [
+                                                      {
+                                                          "config":  {
+                                                                         "showLegend":  true,
+                                                                         "style":  {
+                                                                                       "color":  {
+                                                                                                     "field":  "pm25",
+                                                                                                     "fixed":  "dark-green"
+                                                                                                 },
+                                                                                       "opacity":  0.4,
+                                                                                       "rotation":  {
+                                                                                                        "fixed":  0,
+                                                                                                        "max":  360,
+                                                                                                        "min":  -360,
+                                                                                                        "mode":  "mod"
+                                                                                                    },
+                                                                                       "size":  {
+                                                                                                    "field":  "pm25",
+                                                                                                    "fixed":  5,
+                                                                                                    "max":  12,
+                                                                                                    "min":  4
+                                                                                                },
+                                                                                       "symbol":  {
+                                                                                                      "fixed":  "img/icons/marker/circle.svg",
+                                                                                                      "mode":  "fixed"
+                                                                                                  },
+                                                                                       "symbolAlign":  {
+                                                                                                           "horizontal":  "center",
+                                                                                                           "vertical":  "center"
+                                                                                                       },
+                                                                                       "textConfig":  {
+                                                                                                          "fontSize":  12,
+                                                                                                          "offsetX":  0,
+                                                                                                          "offsetY":  0,
+                                                                                                          "textAlign":  "center",
+                                                                                                          "textBaseline":  "middle"
+                                                                                                      }
+                                                                                   }
+                                                                     },
+                                                          "location":  {
+                                                                           "latitude":  "lat",
+                                                                           "longitude":  "lon",
+                                                                           "mode":  "coords"
+                                                                       },
+                                                          "name":  "Layer 1",
+                                                          "tooltip":  true,
+                                                          "type":  "markers"
+                                                      }
+                                                  ],
+                                       "tooltip":  {
+                                                       "mode":  "details"
+                                                   },
+                                       "view":  {
+                                                    "allLayers":  true,
+                                                    "dashboardVariable":  false,
+                                                    "id":  "zero",
+                                                    "lat":  0,
+                                                    "lon":  0,
+                                                    "noRepeat":  false,
+                                                    "zoom":  1
+                                                }
+                                   },
+                       "pluginVersion":  "13.2.3",
+                       "targets":  [
+                                       {
+                                           "dataset":  "iox",
+                                           "datasource":  {
+                                                              "type":  "influxdb",
+                                                              "uid":  "influxdb-pollution"
+                                                          },
+                                           "editorMode":  "code",
+                                           "format":  "table",
+                                           "rawQuery":  true,
+                                           "rawSql":  "SELECT\r\n  time,\r\n  lat,\r\n  lon,\r\n  pm25,\r\n  pm10,\r\n  no2,\r\n  o3,\r\n  sensor_id\r\nFROM pollution\r\nWHERE $__timeFilter(time)\r\nORDER BY time DESC",
+                                           "refId":  "A",
+                                           "sql":  {
+                                                       "columns":  [
+                                                                       {
+                                                                           "parameters":  [
+
+                                                                                          ],
+                                                                           "type":  "function"
+                                                                       }
+                                                                   ],
+                                                       "groupBy":  [
+                                                                       {
+                                                                           "property":  {
+                                                                                            "type":  "string"
+                                                                                        },
+                                                                           "type":  "groupBy"
+                                                                       }
+                                                                   ]
+                                                   }
+                                       }
+                                   ],
+                       "title":  "Pollution Hotspot Map",
+                       "type":  "geomap"
+                   },
+                   {
+                       "datasource":  {
+                                          "type":  "influxdb",
+                                          "uid":  "influxdb-pollution"
+                                      },
+                       "fieldConfig":  {
+                                           "defaults":  {
+                                                            "color":  {
+                                                                          "mode":  "thresholds"
+                                                                      },
+                                                            "custom":  {
+                                                                           "align":  "auto",
+                                                                           "cellOptions":  {
+                                                                                               "type":  "auto"
+                                                                                           },
+                                                                           "footer":  {
+                                                                                          "reducers":  [
+
+                                                                                                       ]
+                                                                                      },
+                                                                           "inspect":  false
+                                                                       },
+                                                            "thresholds":  {
+                                                                               "mode":  "absolute",
+                                                                               "steps":  [
+                                                                                             {
+                                                                                                 "color":  "green",
+                                                                                                 "value":  0
+                                                                                             }
+                                                                                         ]
+                                                                           }
+                                                        },
+                                           "overrides":  [
+                                                             {
+                                                                 "matcher":  {
+                                                                                 "id":  "byName",
+                                                                                 "options":  "PM2.5",
+                                                                                 "scope":  "series"
+                                                                             },
+                                                                 "properties":  [
+                                                                                    {
+                                                                                        "id":  "custom.cellOptions",
+                                                                                        "value":  {
+                                                                                                      "type":  "color-background"
+                                                                                                  }
+                                                                                    },
+                                                                                    {
+                                                                                        "id":  "thresholds",
+                                                                                        "value":  {
+                                                                                                      "mode":  "absolute",
+                                                                                                      "steps":  [
+                                                                                                                    {
+                                                                                                                        "color":  "green",
+                                                                                                                        "value":  0
+                                                                                                                    },
+                                                                                                                    {
+                                                                                                                        "color":  "dark-yellow",
+                                                                                                                        "value":  30
+                                                                                                                    },
+                                                                                                                    {
+                                                                                                                        "color":  "dark-orange",
+                                                                                                                        "value":  60
+                                                                                                                    },
+                                                                                                                    {
+                                                                                                                        "color":  "red",
+                                                                                                                        "value":  90
+                                                                                                                    },
+                                                                                                                    {
+                                                                                                                        "color":  "semi-dark-purple",
+                                                                                                                        "value":  120
+                                                                                                                    },
+                                                                                                                    {
+                                                                                                                        "color":  "dark-red",
+                                                                                                                        "value":  250
+                                                                                                                    }
+                                                                                                                ]
+                                                                                                  }
+                                                                                    }
+                                                                                ]
+                                                             },
+                                                             {
+                                                                 "matcher":  {
+                                                                                 "id":  "byName",
+                                                                                 "options":  "PM10",
+                                                                                 "scope":  "series"
+                                                                             },
+                                                                 "properties":  [
+                                                                                    {
+                                                                                        "id":  "custom.cellOptions",
+                                                                                        "value":  {
+                                                                                                      "type":  "color-background"
+                                                                                                  }
+                                                                                    },
+                                                                                    {
+                                                                                        "id":  "thresholds",
+                                                                                        "value":  {
+                                                                                                      "mode":  "absolute",
+                                                                                                      "steps":  [
+                                                                                                                    {
+                                                                                                                        "color":  "green",
+                                                                                                                        "value":  0
+                                                                                                                    },
+                                                                                                                    {
+                                                                                                                        "color":  "#EAB839",
+                                                                                                                        "value":  50
+                                                                                                                    },
+                                                                                                                    {
+                                                                                                                        "color":  "dark-orange",
+                                                                                                                        "value":  100
+                                                                                                                    },
+                                                                                                                    {
+                                                                                                                        "color":  "red",
+                                                                                                                        "value":  250
+                                                                                                                    },
+                                                                                                                    {
+                                                                                                                        "color":  "semi-dark-purple",
+                                                                                                                        "value":  350
+                                                                                                                    },
+                                                                                                                    {
+                                                                                                                        "color":  "dark-red",
+                                                                                                                        "value":  430
+                                                                                                                    }
+                                                                                                                ]
+                                                                                                  }
+                                                                                    }
+                                                                                ]
+                                                             },
+                                                             {
+                                                                 "matcher":  {
+                                                                                 "id":  "byName",
+                                                                                 "options":  "NOâ",
+                                                                                 "scope":  "series"
+                                                                             },
+                                                                 "properties":  [
+                                                                                    {
+                                                                                        "id":  "custom.cellOptions",
+                                                                                        "value":  {
+                                                                                                      "type":  "color-background"
+                                                                                                  }
+                                                                                    },
+                                                                                    {
+                                                                                        "id":  "thresholds",
+                                                                                        "value":  {
+                                                                                                      "mode":  "absolute",
+                                                                                                      "steps":  [
+                                                                                                                    {
+                                                                                                                        "color":  "green",
+                                                                                                                        "value":  0
+                                                                                                                    },
+                                                                                                                    {
+                                                                                                                        "color":  "red",
+                                                                                                                        "value":  40
+                                                                                                                    },
+                                                                                                                    {
+                                                                                                                        "color":  "#EAB839",
+                                                                                                                        "value":  80
+                                                                                                                    },
+                                                                                                                    {
+                                                                                                                        "color":  "#6ED0E0",
+                                                                                                                        "value":  180
+                                                                                                                    },
+                                                                                                                    {
+                                                                                                                        "color":  "#EF843C",
+                                                                                                                        "value":  280
+                                                                                                                    },
+                                                                                                                    {
+                                                                                                                        "color":  "#E24D42",
+                                                                                                                        "value":  400
+                                                                                                                    }
+                                                                                                                ]
+                                                                                                  }
+                                                                                    }
+                                                                                ]
+                                                             },
+                                                             {
+                                                                 "matcher":  {
+                                                                                 "id":  "byName",
+                                                                                 "options":  "Oâ",
+                                                                                 "scope":  "series"
+                                                                             },
+                                                                 "properties":  [
+                                                                                    {
+                                                                                        "id":  "custom.cellOptions",
+                                                                                        "value":  {
+                                                                                                      "type":  "color-background"
+                                                                                                  }
+                                                                                    },
+                                                                                    {
+                                                                                        "id":  "thresholds",
+                                                                                        "value":  {
+                                                                                                      "mode":  "absolute",
+                                                                                                      "steps":  [
+                                                                                                                    {
+                                                                                                                        "color":  "green",
+                                                                                                                        "value":  0
+                                                                                                                    },
+                                                                                                                    {
+                                                                                                                        "color":  "#EAB839",
+                                                                                                                        "value":  50
+                                                                                                                    },
+                                                                                                                    {
+                                                                                                                        "color":  "dark-orange",
+                                                                                                                        "value":  100
+                                                                                                                    },
+                                                                                                                    {
+                                                                                                                        "color":  "red",
+                                                                                                                        "value":  168
+                                                                                                                    },
+                                                                                                                    {
+                                                                                                                        "color":  "semi-dark-purple",
+                                                                                                                        "value":  208
+                                                                                                                    },
+                                                                                                                    {
+                                                                                                                        "color":  "dark-red",
+                                                                                                                        "value":  748
+                                                                                                                    }
+                                                                                                                ]
+                                                                                                  }
+                                                                                    }
+                                                                                ]
+                                                             },
+                                                             {
+                                                                 "matcher":  {
+                                                                                 "id":  "byName",
+                                                                                 "options":  "Severity",
+                                                                                 "scope":  "series"
+                                                                             },
+                                                                 "properties":  [
+                                                                                    {
+                                                                                        "id":  "custom.cellOptions",
+                                                                                        "value":  {
+                                                                                                      "type":  "color-background"
+                                                                                                  }
+                                                                                    },
+                                                                                    {
+                                                                                        "id":  "mappings",
+                                                                                        "value":  [
+                                                                                                      {
+                                                                                                          "options":  {
+                                                                                                                          "Good":  {
+                                                                                                                                       "color":  "dark-green",
+                                                                                                                                       "index":  0,
+                                                                                                                                       "text":  "Good"
+                                                                                                                                   },
+                                                                                                                          "Moderately Polluted":  {
+                                                                                                                                                      "color":  "dark-orange",
+                                                                                                                                                      "index":  2,
+                                                                                                                                                      "text":  "Moderately Polluted"
+                                                                                                                                                  },
+                                                                                                                          "Poor":  {
+                                                                                                                                       "color":  "red",
+                                                                                                                                       "index":  3,
+                                                                                                                                       "text":  "Poor"
+                                                                                                                                   },
+                                                                                                                          "Satisfactory":  {
+                                                                                                                                               "color":  "dark-yellow",
+                                                                                                                                               "index":  1,
+                                                                                                                                               "text":  "Satisfactory"
+                                                                                                                                           },
+                                                                                                                          "Severe":  {
+                                                                                                                                         "color":  "dark-red",
+                                                                                                                                         "index":  5,
+                                                                                                                                         "text":  "Severe"
+                                                                                                                                     },
+                                                                                                                          "Very Poor":  {
+                                                                                                                                            "color":  "semi-dark-purple",
+                                                                                                                                            "index":  4,
+                                                                                                                                            "text":  "Very Poor"
+                                                                                                                                        }
+                                                                                                                      },
+                                                                                                          "type":  "value"
+                                                                                                      }
+                                                                                                  ]
+                                                                                    }
+                                                                                ]
+                                                             }
+                                                         ]
+                                       },
+                       "gridPos":  {
+                                       "h":  9,
+                                       "w":  24,
+                                       "x":  0,
+                                       "y":  39
+                                   },
+                       "id":  19,
+                       "options":  {
+                                       "cellHeight":  "sm",
+                                       "showHeader":  true
+                                   },
+                       "pluginVersion":  "13.2.3",
+                       "targets":  [
+                                       {
+                                           "dataset":  "iox",
+                                           "datasource":  {
+                                                              "type":  "influxdb",
+                                                              "uid":  "influxdb-pollution"
+                                                          },
+                                           "editorMode":  "code",
+                                           "format":  "table",
+                                           "rawQuery":  true,
+                                           "rawSql":  "WITH latest AS (\r\n  SELECT\r\n    sensor_id,\r\n    MAX(time) AS latest_time\r\n  FROM pollution\r\n  WHERE $__timeFilter(time)\r\n  GROUP BY sensor_id\r\n)\r\nSELECT\r\n  p.sensor_id AS \"Sensor\",\r\n  p.lat AS \"Latitude\",\r\n  p.lon AS \"Longitude\",\r\n  p.pm25 AS \"PM2.5\",\r\n  p.pm10 AS \"PM10\",\r\n  p.no2 AS \"NOâ\",\r\n  p.o3 AS \"Oâ\",\r\n  CASE\r\n    WHEN p.pm25 \u003c= 30 THEN \u0027Good\u0027\r\n    WHEN p.pm25 \u003c= 60 THEN \u0027Satisfactory\u0027\r\n    WHEN p.pm25 \u003c= 90 THEN \u0027Moderately Polluted\u0027\r\n    WHEN p.pm25 \u003c= 120 THEN \u0027Poor\u0027\r\n    WHEN p.pm25 \u003c= 250 THEN \u0027Very Poor\u0027\r\n    ELSE \u0027Severe\u0027\r\n  END AS \"Severity\"\r\nFROM pollution p\r\nJOIN latest l\r\n  ON p.sensor_id = l.sensor_id\r\n  AND p.time = l.latest_time\r\nORDER BY p.pm25 DESC",
+                                           "refId":  "A",
+                                           "sql":  {
+                                                       "columns":  [
+                                                                       {
+                                                                           "parameters":  [
+
+                                                                                          ],
+                                                                           "type":  "function"
+                                                                       }
+                                                                   ],
+                                                       "groupBy":  [
+                                                                       {
+                                                                           "property":  {
+                                                                                            "type":  "string"
+                                                                                        },
+                                                                           "type":  "groupBy"
+                                                                       }
+                                                                   ]
+                                                   }
+                                       }
+                                   ],
+                       "title":  "Pollution Hotspots",
+                       "type":  "table"
+                   }
+               ],
+    "preload":  false,
+    "refresh":  "",
+    "schemaVersion":  42,
+    "time":  {
+                 "from":  "now-24h",
+                 "to":  "now"
+             },
+    "timepicker":  {
+                       "refresh_intervals":  [
+                                                 "5s",
+                                                 "10s",
+                                                 "30s",
+                                                 "1m",
+                                                 "5m",
+                                                 "15m",
+                                                 "30m",
+                                                 "1h",
+                                                 "2h",
+                                                 "1d"
+                                             ]
+                   },
+    "timezone":  "browser",
+    "title":  "Urban Pollution Hotspot Detection",
+    "uid":  "adqbds6",
+    "version":  2
+}

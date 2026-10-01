@@ -1,0 +1,79 @@
+services:
+
+  mosquitto:
+    image: eclipse-mosquitto:2
+    container_name: pollution-mosquitto
+    restart: unless-stopped
+    volumes:
+      - ./mosquitto/mosquitto.conf:/mosquitto/config/mosquitto.conf:ro
+    expose:
+      - "1883"
+
+  influxdb:
+    image: influxdb:3-core
+    container_name: pollution-influxdb
+    restart: unless-stopped
+    ports:
+      - "8181:8181"
+    command:
+      - influxdb3
+      - serve
+      - --node-id=node0
+      - --object-store=file
+      - --data-dir=/var/lib/influxdb3/data
+      - --admin-token-file=/run/secrets/admin-token
+    secrets:
+      - admin-token
+    volumes:
+      - ./influxdb-data:/var/lib/influxdb3/data
+    expose:
+      - "8181"
+
+  simulator:
+    build:
+      context: ./simulator
+    container_name: pollution-simulator
+    restart: unless-stopped
+    environment:
+      MQTT_BROKER: mosquitto
+      MQTT_PORT: "1883"
+      MQTT_TOPIC: pollution/data
+    depends_on:
+      - mosquitto
+
+  telegraf:
+    image: telegraf:1.40
+    container_name: pollution-telegraf
+    restart: unless-stopped
+    environment:
+      INFLUXDB_TOKEN: ${INFLUXDB_TOKEN}
+    volumes:
+      - ./telegraf/telegraf.docker.conf:/etc/telegraf/telegraf.conf:ro
+    depends_on:
+      - mosquitto
+      - influxdb
+
+  grafana:
+    image: grafana/grafana-oss:latest
+    container_name: pollution-grafana
+    restart: unless-stopped
+    ports:
+      - "3001:3000"
+    environment:
+      GF_AUTH_ANONYMOUS_ENABLED: "true"
+      GF_AUTH_ANONYMOUS_ORG_ROLE: "Viewer"
+      GF_USERS_ALLOW_SIGN_UP: "false"
+      INFLUXDB_TOKEN: ${INFLUXDB_TOKEN}
+    volumes:
+      - grafana-data:/var/lib/grafana
+      - ./grafana/dashboards:/var/lib/grafana/dashboards:ro
+      - ./grafana/provisioning:/etc/grafana/provisioning:ro
+    depends_on:
+      - influxdb
+
+secrets:
+  admin-token:
+    file: ./secrets/admin-token.json
+
+volumes:
+  grafana-data:
