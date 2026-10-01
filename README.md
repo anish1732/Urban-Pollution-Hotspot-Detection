@@ -134,7 +134,7 @@ Urban-Pollution-Hotspot-Detection/
 
 This guide explains how to download, configure, run, monitor, and stop the **Urban Pollution Hotspot Detection** project on a new computer using Docker Compose.
 
-The project uses Docker to run the Python simulator, MQTT broker, Telegraf, InfluxDB Core 3, and Grafana together.
+The project uses Docker to run the Python simulator, MQTT broker, Telegraf, InfluxDB 3 Core, and Grafana together.
 
 ### 🧰 1. Prerequisites
 
